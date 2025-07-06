@@ -1,15 +1,19 @@
-# Stage 1: Use Debian to install yt-dlp, ffmpeg, and python3
-FROM debian:bullseye as downloader
+FROM node:18-bullseye
 
+# Install OS-level deps
 RUN apt-get update && \
-    apt-get install -y curl ffmpeg python3 && \
-    curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /yt-dlp && \
-    chmod +x /yt-dlp
+    apt-get install -y \
+    curl ffmpeg python3 python3-pip git build-essential && \
+    pip3 install yt-dlp && \
+    npm install --global n8n
 
-# Stage 2: Use n8n image and copy tools from Debian
-FROM n8nio/n8n:latest
+# Create n8n user
+RUN useradd -m -s /bin/bash n8n
 
-COPY --from=downloader /yt-dlp /usr/local/bin/yt-dlp
-COPY --from=downloader /usr/bin/ffmpeg /usr/bin/ffmpeg
-COPY --from=downloader /usr/bin/python3 /usr/bin/python3
-COPY --from=downloader /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu
+USER n8n
+WORKDIR /home/n8n
+
+# Expose default n8n port
+EXPOSE 5678
+
+CMD ["n8n"]
