@@ -1,19 +1,11 @@
-FROM node:20-bullseye
+FROM n8nio/n8n
 
-# Install OS-level deps
+# Install dependencies
 RUN apt-get update && \
-    apt-get install -y \
-    curl ffmpeg python3 python3-pip git build-essential && \
-    pip3 install yt-dlp && \
-    npm install --global n8n
+    apt-get install -y curl ffmpeg fontconfig && \
+    rm -rf /var/lib/apt/lists/*
 
-# Create n8n user
-RUN useradd -m -s /bin/bash n8n
-
-USER n8n
-WORKDIR /home/n8n
-
-# Expose default n8n port
-EXPOSE 5678
-
-CMD ["n8n"]
+# Download and install the NotoSerif Condensed Black Italic font
+RUN mkdir -p /usr/share/fonts/truetype/custom && \
+    curl -L -o /usr/share/fonts/truetype/custom/NotoSerif-CondensedBlackItalic.ttf https://github.com/googlefonts/noto-fonts/blob/main/hinted/ttf/NotoSerif/NotoSerif-CondensedBlackItalic.ttf?raw=true && \
+    fc-cache -fv
