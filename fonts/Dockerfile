@@ -6,7 +6,7 @@ USER root
 RUN apt-get update && apt-get install -y fontconfig
 
 # Copy your custom font and update the font cache
-COPY NotoSerif-CondensedBlackItalic.ttf /usr/share/fonts/truetype/
+COPY fonts/NotoSerif-CondensedBlackItalic.ttf /usr/share/fonts/truetype/
 RUN fc-cache -f -v
 
 # --- Add the rest of your n8n setup commands here ---
