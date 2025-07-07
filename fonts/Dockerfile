@@ -9,8 +9,10 @@ RUN apt-get update && apt-get install -y fontconfig
 COPY fonts/NotoSerif-CondensedBlackItalic.ttf /usr/share/fonts/truetype/
 RUN fc-cache -f -v
 
-# --- Add the rest of your n8n setup commands here ---
-# Example for n8n:
+# Install n8n globally as the root user first
+RUN npm install -g n8n
+
+# Now, switch to the non-root user for security
 USER node
 WORKDIR /home/node
 RUN npm install -g n8n
