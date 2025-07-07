@@ -1,20 +1,20 @@
-# Use the correct Node.js version
+# 1. Use a modern Node.js version
 FROM node:20-bullseye
 
-# Install font-related tools
+# 2. Switch to root to install system packages and fonts
 USER root
 RUN apt-get update && apt-get install -y fontconfig
 
-# Copy your custom font and update the font cache
+# 3. Copy font from your 'fonts' folder and update cache
 COPY fonts/NotoSerif-CondensedBlackItalic.ttf /usr/share/fonts/truetype/
 RUN fc-cache -f -v
 
-# Install n8n globally as the root user first
+# 4. Install n8n globally while still root
 RUN npm install -g n8n
 
-# Now, switch to the non-root user for security
+# 5. Switch to the non-root user for security
 USER node
 WORKDIR /home/node
-RUN npm install -g n8n
-COPY . .
+
+# 6. Set the default command to start n8n
 ENTRYPOINT [ "n8n" ]
