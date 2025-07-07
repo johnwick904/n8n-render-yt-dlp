@@ -3,7 +3,7 @@ FROM node:20-bullseye
 
 # 2. Switch to root to install system packages
 USER root
-RUN apt-get update && apt-get install -y fontconfig python3-pip
+RUN apt-get update && apt-get install -y fontconfig python3-pip ffmpeg
 
 # 3. Install yt-dlp using pip
 RUN pip3 install --no-cache-dir -U yt-dlp
