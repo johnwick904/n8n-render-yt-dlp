@@ -1,4 +1,7 @@
-# Download packages
+# Base image — using Debian here
+FROM debian:bullseye
+
+# Install necessary packages
 RUN apt-get update && \
     apt-get install -y \
         curl \
@@ -9,8 +12,8 @@ RUN apt-get update && \
         ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy your font
+# Copy the font from your repo
 COPY fonts/NotoSerif-CondensedBlackItalic.ttf /usr/share/fonts/truetype/custom/NotoSerif-CondensedBlackItalic.ttf
 
-# Rebuild font cache
+# Update font cache
 RUN fc-cache -f -v
