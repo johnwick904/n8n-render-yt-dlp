@@ -1,7 +1,8 @@
 services:
   - type: web
-    name: yt-dlp-app
+    name: n8n-yt-dlp
     env: docker
     plan: free
+    repo: https://github.com/johnwick904/n8n-render-yt-dlp
     dockerfilePath: ./Dockerfile
     autoDeploy: true
