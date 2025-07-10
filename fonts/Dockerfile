@@ -1,23 +1,25 @@
-# 1. Use a modern Node.js version
-FROM node:20-bullseye
+# Use an Alpine-based image with Python
+FROM python:3.11-alpine
 
-# 2. Switch to root to install system packages
-USER root
-RUN apt-get update && apt-get install -y fontconfig python3-pip ffmpeg
+# Set environment
+ENV PYTHONUNBUFFERED=1
 
-# 3. Install yt-dlp using pip
-RUN pip3 install --no-cache-dir -U yt-dlp
+# Install system dependencies
+RUN apk update && apk add --no-cache \
+    ffmpeg \
+    gcc \
+    musl-dev \
+    python3-dev \
+    py3-pip \
+    curl \
+    bash
 
-# 4. Copy font from your 'fonts' folder and update cache
-COPY fonts/NotoSerif-CondensedBlackItalic.ttf /usr/share/fonts/truetype/
-RUN fc-cache -f -v
+# Install yt-dlp
+RUN pip install yt-dlp
 
-# 5. Install n8n globally while still root
-RUN npm install -g n8n
+# Optional: Copy your project files
+COPY . /app
+WORKDIR /app
 
-# 6. Switch to the non-root user for security
-USER node
-WORKDIR /home/node
-
-# 7. Set the default command to start n8n
-ENTRYPOINT [ "n8n" ]
+# Default command (can be replaced by Render)
+CMD ["bash"]
